@@ -1,14 +1,8 @@
 __author__ = 'sean-abbott'
 
-from setuptools import setup, Command
+from setuptools import setup
+from distutils.cmd import Command
 import versioneer
-
-versioneer.VCS = 'git'
-versioneer.versionfile_source = 'src/auto_build_env/_version.py'
-versioneer.versionfile_build = 'auto_build_env/_version.py'
-versioneer.tag_prefix = ''  # tags are like 1.2.0
-versioneer.parentdir_prefix = 'auto-build_env-'  # dirname like 'tool-1.2.0'
-
 
 def readme():
     with open('README.rst') as f:
@@ -24,18 +18,24 @@ def BaseCommand(Command):
         pass
 
 def RunDepCommand(BaseCommand):
-    description = "install runtime dependencies"
 
-    cmd = ["pip", "install", "-r", "requirements.txt"]
-    ret = subprocess.call(cmd)
-    sys.exit(ret)
+    description = "install runtime dependencies"
+    def run(self):
+        cmd = ["pip", "install", "-r", "requirements.txt"]
+        ret = subprocess.call(cmd)
+        sys.exit(ret)
+
+def get_command_class():
+    base = versioneer.get_cmdclass()
+    base['install_run_deps'] = RunDepCommand
+    return base
 
 setup(
   name='auto_build_env',
   version=versioneer.get_version(),
-  cmdclass=versioneer.get_cmdclass(),
+  cmdclass=get_command_class(),
   description='Automatic Build Environment Generator',
-  long_descritpion=readme(),
+  long_description=readme(),
   author='Sean Abbott',
   author_email='sean.abbott@datarobot.com',
   package_dir={'': 'src'},
@@ -46,5 +46,4 @@ setup(
   entry_points={
     'console_scripts': ['abe=abe.cli:main']
   },
-  cmdclass['install_run_depedencies'] = RunDepCommand
 )
