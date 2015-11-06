@@ -48,6 +48,14 @@ def _create_skel_files(j_ctx_dict, template_list):
     for target in TEMPLATE_LIST:
         _render_template(jinja_env, j_ctx_dict)
 
+def _update_template_paths(j_ctx_dict):
+    new_list = []
+    for template in TEMPLATE_LIST:
+        new_list.append( {
+            'src': template['src']),
+            'dest': os.path.join(j_ctx_dict['target_dir'], template['dest'])
+            })
+
 @click.group()
 def cli():
     pass
