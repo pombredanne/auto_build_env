@@ -6,6 +6,10 @@ import sys
 import click
 from jinja2 import Environment, PackageLoader
 
+TEMPLATE_LIST = [
+    {'src': 'setup.py.j2', 'dest': 'setup.py'}    
+]
+
 def _create_skel_dirs(j_ctx_dict):
     dir_list = [
             'src',
@@ -25,24 +29,24 @@ def _create_skel_dirs(j_ctx_dict):
         else:
             raise
 
-def _template_in_setup_py(env, j_ctx_dict):
-    template = env.get_template('setup.py.j2')
+def _render_template(env, j_ctx_dict, src_file, dest_file):
+    template = env.get_template(src_file)
     try:
-        with open(os.path.join(j_ctx_dict['target_dir'], 'setup.py'), 'w') as f:
+        with open(dest_file, 'w') as f:
             f.write(template.render(j_ctx_dict))
     except:
         raise
 
     return True
 
-def _create_skel_files(j_ctx_dict):
+def _create_skel_files(j_ctx_dict, template_list):
     try:
         jinja_env = Environment(loader=PackageLoader('abe', 'templates'))
     except:
         click.echo("Error loading templates...")
         raise
-
-    setup_py_success = _template_in_setup_py(jinja_env, j_ctx_dict)
+    for target in TEMPLATE_LIST:
+        _render_template(jinja_env, j_ctx_dict)
 
 @click.group()
 def cli():
@@ -64,5 +68,7 @@ def create_skeleton(project_name, target_dir=None):
             'target_dir': target_dir
             }
 
+    final_template_list = _update_template_paths(jinja_context_dir)
+
     _create_skel_dirs(jinja_context_dir)
-    _create_skel_files(jinja_context_dir)
+    _create_skel_files(jinja_context_dir, final_template_list)
