@@ -5,6 +5,8 @@ from distutils.cmd import Command
 import subprocess
 import sys
 
+import versioneer
+
 def readme():
     with open('README.rst') as f:
         return f.read()
@@ -40,7 +42,7 @@ class BuildDepCommand(BaseCommand):
         sys.exit(ret)
 
 def get_command_class():
-    base = {}
+    base = versioneer.get_cmdclass()
     base['run_deps'] = RunDepCommand
     base['test_deps'] = TestDepCommand
     base['build_deps'] = BuildDepCommand
@@ -48,7 +50,7 @@ def get_command_class():
 
 setup(
   name='auto_build_env',
-  version=0.1,
+  version=versioneer.get_version(),
   cmdclass=get_command_class(),
   description='Automatic Build Environment Generator',
   long_description=readme(),

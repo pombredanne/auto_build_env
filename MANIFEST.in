@@ -1,1 +1,2 @@
 recursive-include src/abe/templates *
+include src/abe/_version.py
