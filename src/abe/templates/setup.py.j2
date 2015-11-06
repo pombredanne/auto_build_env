@@ -1,4 +1,4 @@
-__author__ = 'sean-abbott'
+__author__ = 'DataRobot'
 
 from setuptools import setup
 from distutils.cmd import Command
@@ -47,20 +47,16 @@ def get_command_class():
     return base
 
 setup(
-  name='auto_build_env',
+  name='{{ project_name }}',
   version=0.1,
   cmdclass=get_command_class(),
   description='Automatic Build Environment Generator',
   long_description=readme(),
-  author='Sean Abbott',
-  author_email='sean.abbott@datarobot.com',
-  packages=['abe'],
-  package_dir={'abe': 'src/abe'},
+  author='datarobot',
+  author_email='datarobot@datarobot.com',
+  packages=['{{ project_name }}'],
+  package_dir={'{{ project_name }}': 'src/{{ project_name }}'},
   package_data={
     '': ['*.rst'],
-    'abe': ['templates/*']
-  },
-  entry_points={
-      'console_scripts': ['abe=abe.cli:cli']
   },
 )
