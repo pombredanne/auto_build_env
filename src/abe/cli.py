@@ -7,7 +7,7 @@ import click
 from jinja2 import Environment, PackageLoader
 
 TEMPLATE_LIST = [
-    {'src': 'setup.py.j2', 'dest': 'setup.py'}    
+        {'src': 'setup.py.j2', 'target_filename': 'setup.py', 'target_path': ''}    
 ]
 
 def _create_skel_dirs(j_ctx_dict):
@@ -45,16 +45,28 @@ def _create_skel_files(j_ctx_dict, template_list):
     except:
         click.echo("Error loading templates...")
         raise
-    for target in TEMPLATE_LIST:
-        _render_template(jinja_env, j_ctx_dict)
+    for target in template_list:
+        _render_template(
+                jinja_env,
+                j_ctx_dict,
+                target['src'],
+                target['target_path']
+                )
 
 def _update_template_paths(j_ctx_dict):
     new_list = []
     for template in TEMPLATE_LIST:
-        new_list.append( {
-            'src': template['src']),
-            'dest': os.path.join(j_ctx_dict['target_dir'], template['dest'])
+        new_list.append({
+            'src': template['src'],
+            'target_filename': template['target_filename'],
+            'target_path': os.path.join(
+                    j_ctx_dict['target_dir'],
+                    template['target_path'],
+                    template['target_filename']
+                    )
             })
+
+    return new_list
 
 @click.group()
 def cli():
