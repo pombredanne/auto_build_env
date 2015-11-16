@@ -6,7 +6,7 @@ dep_list:
       os_version_id: "12.04"
       docker_image: "ubuntu"
       docker_image_tag: "12.04"
-      dependency_command: "apt-get install"
+      package_family: "deb"
       build_dependency_list: []
       test_dependency_list: []
       run_dependency_list: []
@@ -16,7 +16,7 @@ dep_list:
       os_version_id: "8"
       docker_image: "debian"
       docker_image_tag: "jessie"
-      dependency_command: "apt-get install"
+      package_family: "deb"
       build_dependency_list: []
       test_dependency_list: []
       run_dependency_list: []

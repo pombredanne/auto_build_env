@@ -1,0 +1,7 @@
+FROM {{ docker_image }}:{{ docker_image_tag }}
+
+RUN {{ package_family.update }} && {{ package_family.install }} \
+    {{ build_dependency_list|join(' ') }}
+
+COPY {{ build_dependency_filepath }} /tmp/build_requirements.txt
+RUN pip install -r /tmp/build_requirements.txt
