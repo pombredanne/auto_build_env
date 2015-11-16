@@ -2,6 +2,9 @@ __author__ = 'sean-abbott'
 
 import os
 import sys 
+import shutil
+import inspect
+from pkg_resources import resource_filename
 
 import click
 from jinja2 import Environment, PackageLoader
@@ -43,7 +46,11 @@ def _render_template(env, j_ctx_dict, src_file, dest_file):
     return True
 
 def _copy_dummy_dirs(j_ctx_dict):
-    for 
+    for d in DUMMY_DIR_LIST:
+        shutil.copytree(
+                os.path.join(j_ctx_dict['files_dir'], d),
+                os.path.join(j_ctx_dict['target_dir'], d)
+                )
 
 def _create_skel_files(j_ctx_dict, template_list):
     try:
@@ -74,6 +81,15 @@ def _update_template_paths(j_ctx_dict):
 
     return new_list
 
+def _get_files_dir():
+    # http://peak.telecommunity.com/DevCenter/PkgResources#resource-extraction
+    pdir = resource_filename(__name__, 'files')
+    if pdir is not None:
+        return pdir
+    else:
+        click.echo("Error retreiving necessary file")
+        sys.exit(1)
+
 @click.group()
 def cli():
     pass
@@ -89,12 +105,14 @@ def create_skeleton(project_name, target_dir=None):
         click.echo("Target directory exists.  Exiting.")
         sys.exit(1)
 
-    jinja_context_dir = {
+    jinja_context_dict = {
             'project_name': project_name,
-            'target_dir': target_dir
+            'target_dir': target_dir,
+            'files_dir': _get_files_dir()
             }
 
-    final_template_list = _update_template_paths(jinja_context_dir)
+    final_template_list = _update_template_paths(jinja_context_dict)
 
-    _create_skel_dirs(jinja_context_dir)
-    _create_skel_files(jinja_context_dir, final_template_list)
+    _create_skel_dirs(jinja_context_dict)
+    _create_skel_files(jinja_context_dict, final_template_list)
+    _copy_dummy_dirs(jinja_context_dict)

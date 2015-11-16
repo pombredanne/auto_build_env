@@ -72,11 +72,12 @@ setup(
   long_description=readme(),
   author='Sean Abbott',
   author_email='sean.abbott@datarobot.com',
+  url='https://github.com/sean-abbott/auto_build_env',
   packages=['abe'],
   package_dir={'abe': 'src/abe'},
   package_data={
     '': ['*.rst'],
-    'abe': ['templates/*']
+    'abe': ['templates/*', 'files/dependencies/*', 'schema/*'],
   },
   entry_points={
       'console_scripts': ['abe=abe.cli:cli']

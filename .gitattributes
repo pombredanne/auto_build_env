@@ -1,1 +1,2 @@
 _version.py export-subst
+src/abe/_version.py export-subst

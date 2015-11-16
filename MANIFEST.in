@@ -1,4 +1,5 @@
 recursive-include src/abe/templates *
 recursive-include src/abe/files/dependencies *
 recursive-include src/abe/schema *
+include versioneer.py
 include src/abe/_version.py

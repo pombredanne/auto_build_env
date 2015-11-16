@@ -36,9 +36,9 @@ def get_config():
     cfg = VersioneerConfig()
     cfg.VCS = "git"
     cfg.style = "pep440"
-    cfg.tag_prefix = "''"
-    cfg.parentdir_prefix = "abe-"
-    cfg.versionfile_source = "_version.py"
+    cfg.tag_prefix = ""
+    cfg.parentdir_prefix = "auto_build_env-"
+    cfg.versionfile_source = "src/abe/_version.py"
     cfg.verbose = False
     return cfg
 
