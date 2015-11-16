@@ -1,0 +1,40 @@
+type: map
+mapping:
+    "schema_version":
+        type: "str"
+        required: true
+    "dep_list":
+        type: seq
+        sequence:
+            - type: map
+              mapping:
+                "os_name":
+                    type: str
+                    required: true
+                "os_version_id":
+                    type: str
+                    required: true
+                "docker_image": 
+                    type: str
+                    required: true
+                "docker_image_tag": 
+                    type: str
+                    required: true
+                "dependency_command": 
+                    type: str
+                    required: true
+                "build_dependency_list":
+                    type: seq
+                    required: false
+                    sequence:
+                        - type: str
+                "test_dependency_list":
+                    type: seq
+                    required: false
+                    sequence:
+                        - type: str
+                "run_dependency_list":
+                    type: seq
+                    required: false
+                    sequence:
+                        - type: str

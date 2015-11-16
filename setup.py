@@ -4,6 +4,7 @@ from setuptools import setup
 from distutils.cmd import Command
 import subprocess
 import sys
+import os
 
 import versioneer
 

@@ -9,6 +9,9 @@ from jinja2 import Environment, PackageLoader
 TEMPLATE_LIST = [
         {'src': 'setup.py.j2', 'target_filename': 'setup.py', 'target_path': ''}    
 ]
+DUMMY_DIR_LIST = [
+        'dependencies'
+        ]
 
 def _create_skel_dirs(j_ctx_dict):
     dir_list = [
@@ -38,6 +41,9 @@ def _render_template(env, j_ctx_dict, src_file, dest_file):
         raise
 
     return True
+
+def _copy_dummy_dirs(j_ctx_dict):
+    for 
 
 def _create_skel_files(j_ctx_dict, template_list):
     try:

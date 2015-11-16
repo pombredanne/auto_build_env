@@ -1,0 +1,23 @@
+---
+schema_version: "0.1"
+dep_list:
+    # Ubuntu 12.04
+    - os_name: "ubuntu"
+      os_version_id: "12.04"
+      docker_image: "ubuntu"
+      docker_image_tag: "12.04"
+      dependency_command: "apt-get install"
+      build_dependency_list: []
+      test_dependency_list: []
+      run_dependency_list: []
+    
+    # Debian Jessie
+    - os_name: "debian"
+      os_version_id: "8"
+      docker_image: "debian"
+      docker_image_tag: "jessie"
+      dependency_command: "apt-get install"
+      build_dependency_list: []
+      test_dependency_list: []
+      run_dependency_list: []
+    
