@@ -23,21 +23,36 @@ class BaseCommand(Command):
 class RunDepCommand(BaseCommand):
     description = "install runtime dependencies"
     def run(self):
-        cmd = ["pip", "install", "-r", "requirements.txt"]
+        cmd = [
+                "pip",
+                "install",
+                "-r",
+                os.path.join("dependencies", "requirements.txt")
+                ]
         ret = subprocess.call(cmd)
         sys.exit(ret)
 
 class TestDepCommand(BaseCommand):
     description = "install runtime dependencies"
     def run(self):
-        cmd = ["pip", "install", "-r", "test_requirements.txt"]
+        cmd = [
+                "pip",
+                "install",
+                "-r",
+                os.path.join("dependencies", "test_requirements.txt")
+                ]
         ret = subprocess.call(cmd)
         sys.exit(ret)
 
 class BuildDepCommand(BaseCommand):
     description = "install runtime dependencies"
     def run(self):
-        cmd = ["pip", "install", "-r", "build_requirements.txt"]
+        cmd = [
+                "pip",
+                "install",
+                "-r",
+                os.path.join("dependencies","build_requirements.txt")
+                ]
         ret = subprocess.call(cmd)
         sys.exit(ret)
 
