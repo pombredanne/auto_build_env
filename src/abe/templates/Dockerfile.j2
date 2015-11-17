@@ -1,7 +1,14 @@
 FROM {{ docker_image }}:{{ docker_image_tag }}
 
-RUN {{ package_family.update }} && {{ package_family.install }} \
-    {{ build_dependency_list|join(' ') }}
+{# YELLOW In the future, will need to have sections based on language needs #}
 
-COPY {{ build_dependency_filepath }} /tmp/build_requirements.txt
+RUN {{ package_family.updatecmd }} && {{ package_family.installcmd }} \
+    {{ package_family.python_pkg_pkg }}
+
+{% if build_dependency_list|length > 0 %}
+RUN {{ package_family.updatecmd }} && {{ package_family.installcmd }} \
+    {{ build_dependency_list|join(' ') }}
+{% endif %}
+
+COPY {{ build_dependency_file }} /tmp/build_requirements.txt
 RUN pip install -r /tmp/build_requirements.txt

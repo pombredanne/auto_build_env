@@ -3,21 +3,10 @@ schema_version: "0.1"
 dep_list:
     # Ubuntu 12.04
     - os_name: "ubuntu"
-      os_version_id: "12.04"
+      os_version_id: "14.04"
       docker_image: "ubuntu"
-      docker_image_tag: "12.04"
+      docker_image_tag: "14.04"
       package_family: "deb"
       build_dependency_list: []
       test_dependency_list: []
       run_dependency_list: []
-    
-    # Debian Jessie
-    - os_name: "debian"
-      os_version_id: "8"
-      docker_image: "debian"
-      docker_image_tag: "jessie"
-      package_family: "deb"
-      build_dependency_list: []
-      test_dependency_list: []
-      run_dependency_list: []
-    

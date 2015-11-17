@@ -20,9 +20,10 @@ mapping:
                 "docker_image_tag": 
                     type: str
                     required: true
-                "dependency_command": 
+                "package_family": 
                     type: str
                     required: true
+                    enum: [deb]
                 "build_dependency_list":
                     type: seq
                     required: false

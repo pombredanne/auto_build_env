@@ -1,5 +1,7 @@
 __author__ = 'sean-abbott'
 
+# RED this whole thing should be swapped out for cookiecutter
+# https://github.com/audreyr/cookiecutter
 import os
 import sys 
 import shutil
@@ -9,6 +11,8 @@ from pkg_resources import resource_filename
 import click
 from jinja2 import Environment, PackageLoader
 
+
+# YELLOW create_build_env uses a similar pattern.  abstract
 TEMPLATE_LIST = [
         {'src': 'setup.py.j2', 'target_filename': 'setup.py', 'target_path': ''}    
 ]
@@ -35,6 +39,7 @@ def _create_skel_dirs(j_ctx_dict):
         else:
             raise
 
+# YELLOW use utils
 def _render_template(env, j_ctx_dict, src_file, dest_file):
     template = env.get_template(src_file)
     try:

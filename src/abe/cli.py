@@ -5,6 +5,7 @@ import click
 
 # this package
 import create_skeleton
+import create_build_env
 
 cli = click.CommandCollection(sources=[
     create_skeleton.cli,
