@@ -6,6 +6,7 @@ from pkg_resources import resource_filename
 import shutil
 import copy
 import glob
+import json
 
 # third party
 import click
@@ -13,6 +14,7 @@ from jinja2 import Environment, PackageLoader
 from pykwalify.core import Core
 import pykwalify
 import yaml
+import docker
 
 # this module
 from errors import AbeConfigError
@@ -113,8 +115,32 @@ def _copy_dependency_files(dirpath, options):
     for key in DEP_COPY_KEYLIST:
         shutil.copy(options[key], dep_path)
 
+def _create_dabbmd(osenv, component_name, buildenv_path):
+    # RED this needs to be set at the abe level and passed in
+    with open('.abe_config.yml', 'r') as f:
+        abe_config_dict = yaml.load(f)
+
+    # YELLOW we're probably goingto want this to be more fine-grained
+    dabbmd_dict = {}
+    dabbmd_dict.update(abe_config_dict)
+
+    dabbmd_dict['component_name'] = component_name
+
+    # RED yeah, this is needs to have a known way of getting the right version
+    dabbmd_dict['buildenv_version'] = 'latest'
+
+    with open(os.path.join(buildenv_path, 'dabbmd.json'), 'w') as f:
+        json.dump(dabbmd_dict, f)
+
+def _get_component_name():
+    """ get the component name from setup.py """
+    # RED what I actually want is to get the name from the correct place
+    # i.e., setup.py, pom.xml, package.json, etc.
+    return os.path.basename(os.getcwd())
+
 def _create_build_directories(osenv_list, options_dict):
     wd = options_dict['working_dir']
+    component_name = _get_component_name()
 
     try:
         jinja_env = Environment(loader=PackageLoader('abe', 'templates'))
@@ -136,7 +162,29 @@ def _create_build_directories(osenv_list, options_dict):
 
         _template_in_buildenv_files(buildenv_path, osenv, jinja_env)
         _copy_dependency_files(buildenv_path, options_dict)
+        _create_dabbmd(osenv, component_name, buildenv_path)
 
+def _get_docker_tag(docker_dir):
+    """ get the dabbmd.json file and return the tag string from it """
+    with open(os.path.join(docker_dir, 'dabbmd.json'), 'r') as f:
+        dabbmd_dict = json.load(f)
+
+    docker_tag = "{}/{}/{}:{}".format(
+            dabbmd_dict['docker_repository'], 
+            dabbmd_dict['docker_username'],
+            dabbmd_dict['component_name'],
+            dabbmd_dict['buildenv_version']
+            )
+    return docker_tag
+    
+
+def run_buildenv_builds(work_dir):
+    """ change to each buildenv directory in working_dir and run the builds """
+    c = docker.Client(base_url='unix://var/run/docker.sock', version='auto')
+    for d in glob.glob(os.path.join(work_dir, 'buildenv*')):
+        # RED this is way to fast and dirty, even for this project
+        for line in c.build(path=d, tag=_get_docker_tag(d)):
+            click.echo(line)
 
 @click.group()
 def cli():
@@ -166,3 +214,4 @@ def create_build_env(**kwargs):
     dependency_dict = _get_os_dependencies(kwargs)
 
     _create_build_directories(dependency_dict['dep_list'], kwargs)
+    run_buildenv_builds(kwargs['working_dir'])
