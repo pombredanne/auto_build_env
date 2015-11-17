@@ -1,0 +1,5 @@
+---
+# the username is the part before the slash in an image name
+# i.e. mycompany/myimage:tag
+docker_username: mycompany
+docker_repository: docker.mycompany.com

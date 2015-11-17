@@ -60,3 +60,7 @@ target/
 
 # vim
 *.swp
+
+# local workspace
+work/
+.abe_config*
