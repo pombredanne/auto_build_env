@@ -117,18 +117,29 @@ def _copy_dependency_files(dirpath, options):
 
 def _create_dabbmd(osenv, component_name, buildenv_path):
     # RED this needs to be set at the abe level and passed in
-    with open('.abe_config.yml', 'r') as f:
-        abe_config_dict = yaml.load(f)
+    try:
+        with open('.abe_config.yml', 'r') as f:
+            abe_config_dict = yaml.load(f)
+    except IOError as ie:
+        click.echo("No abe_config found...")
+        abe_config_dict = {}
+
+    # YELLOW this should come from a global list
+    config_dict = {}
+    DABB_OPTIONS = ['docker_username', 'docker_repository']
+    for opt in DABB_OPTIONS:
+        config_dict[opt] = utils.get_option(opt, {}, abe_config_dict)
 
     # YELLOW we're probably goingto want this to be more fine-grained
     dabbmd_dict = {}
-    dabbmd_dict.update(abe_config_dict)
+    dabbmd_dict.update(config_dict)
 
     dabbmd_dict['component_name'] = component_name
 
     # RED yeah, this is needs to have a known way of getting the right version
     dabbmd_dict['buildenv_version'] = 'latest'
 
+    click.echo(dabbmd_dict)
     with open(os.path.join(buildenv_path, 'dabbmd.json'), 'w') as f:
         json.dump(dabbmd_dict, f)
 

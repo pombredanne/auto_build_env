@@ -79,6 +79,12 @@ setup(
     '': ['*.rst'],
     'abe': ['templates/*', 'files/dependencies/*', 'schema/*'],
   },
+  install_requires=[
+    "click",
+    "jinja2",
+    "pykwalify",
+    "docker-py"
+  ],
   entry_points={
       'console_scripts': ['abe=abe.cli:cli']
   },

@@ -11,6 +11,8 @@ from pkg_resources import resource_filename
 import click
 from jinja2 import Environment, PackageLoader
 
+import utils
+
 
 # YELLOW create_build_env uses a similar pattern.  abstract
 TEMPLATE_LIST = [
