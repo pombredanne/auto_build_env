@@ -64,3 +64,6 @@ target/
 # local workspace
 work/
 .abe_config*
+
+# Ipython
+*.ipynb
